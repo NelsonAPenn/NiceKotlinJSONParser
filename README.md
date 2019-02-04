@@ -23,9 +23,15 @@ Just download the Kotlin file and add it into your project.
   ```kotlin
   is Result.Success->{
     val data=result.get()
+    
+    //usage of my Nice Kotlin JSON parser
+    
     var jsonData=JSONData(data)
     toast((jsonData[1]%"login_token").value)
-    toast((jsonData[2]).value)
+    toast(jsonData[2].value)
+    
+    //end usage of my Nice Kotlin JSON Parser
+    
     done=true//success, get token, decide where to send user
   }
   ```
