@@ -1,6 +1,6 @@
 # Sleek JSONParser
 
-I created this Nice Kotlin JSON Parser due to the immense pain that GSON causes me. It is still in the early stages of development, but it does the job. 
+I created this nice Kotlin JSON Parser due to the immense pain that GSON causes me. It is still in the early stages of development, but it does the job. 
 
 ## Installation
 
