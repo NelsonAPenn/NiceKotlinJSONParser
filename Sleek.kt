@@ -3,7 +3,7 @@ package com.example.nelsonpenn.connect
 import com.bumptech.glide.load.engine.bitmap_recycle.IntegerArrayAdapter
 import kotlin.reflect.KProperty
 
-class JSONData(var source:String) {
+class Sleek(var source:String) {
     var value:String=""
     get(){
         var v:String=""
@@ -12,7 +12,7 @@ class JSONData(var source:String) {
                 v+=c
         return v
     }
-    fun seekNext(pos: Int): Int {
+    private fun seekNext(pos: Int): Int {
         var p = pos
         var lvl:Int=0
         while (p<source.length && (source[p] != ',' || lvl!=0)){
@@ -29,7 +29,7 @@ class JSONData(var source:String) {
         }
     }
 
-    fun grabToNext(pos: Int): String {
+    private fun grabToNext(pos: Int): String {
         var p = pos
         var value: String=""
         var lvl:Int=0
@@ -49,7 +49,7 @@ class JSONData(var source:String) {
     }
 
 
-    operator fun get(i: Int): JSONData {
+    operator fun get(i: Int): Sleek {
         var j:Int=0
         var pos:Int=1
         while(j<i) {
@@ -57,13 +57,13 @@ class JSONData(var source:String) {
             j++
         }
         var output:String=grabToNext(pos)
-        return JSONData(output)
+        return Sleek(output)
 
     }
 
-    operator fun rem(myProperty:String): JSONData {
+    operator fun rem(myProperty:String): Sleek {
         if (source[0] != '{')
-            return JSONData("")
+            return Sleek("")
         var property='\"'+myProperty+'\"'
         var i: Int = 1
         var lvl: Int = 1
@@ -74,11 +74,11 @@ class JSONData(var source:String) {
                 lvl--
             if (lvl == 1 && source.substring(i, (i + property.length)).contentEquals(property) && source[i+property.length]==':') { //check for if it is a match and if it is actually a property.
                 var output = grabToNext(i + property.length + 1)
-                return JSONData(output)
+                return Sleek(output)
             }
             i++
         }
-        return JSONData("")
+        return Sleek("")
     }
 
 
