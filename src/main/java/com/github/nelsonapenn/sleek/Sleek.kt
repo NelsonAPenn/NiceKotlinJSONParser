@@ -51,9 +51,10 @@ class Sleek(var source:String) {
                 }
                 catch(e:IndexOutOfBoundsException)
                 {
-                    continue
+                    break
                 }
             }
+            return output
         }
     var map:Map<String,Sleek> = HashMap()
         get(){
