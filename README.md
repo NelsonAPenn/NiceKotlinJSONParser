@@ -4,7 +4,11 @@ I created this nice Kotlin JSON Parser due to the immense pain that GSON causes 
 
 ## Installation
 
-Just download the Kotlin file and add it into your project.
+Add this project as a submodule to your Android application with Import Gradle Module
+
+OR
+
+Just download the Kotlin file Sleek.kt and add it into your project.
 
 ## Usage
 
@@ -14,33 +18,40 @@ Just download the Kotlin file and add it into your project.
 
 - The mod operator `%`, placed between a Sleek object (that is based on a JSON object) and a string parameter name, returns a Sleek object based on the value of that property.
 
-- When you have a Sleek object that is based on a single value, simply use `.value` to get it out into a string.
+- Chain these for a nice JSON parsing experience!
+
+- When you have a Sleek object that is based on a single value, simply use `.string` to get it out into a string, or `.int` to get it out as an int.
+
+-When you have a Sleek object that is based on a JSON array, you have the option of using `.array` to return an array of type `Array<Sleek>` containing the entries of the JSON array.
+
+-When you have a Sleek object that is based on a JSON object, you have the option of using `.map` to return a map of type `Map<String,Sleek>` containing the fields of the object.
 
 - Chain these for a nice JSON parsing experience!
 
 ## Example
 
   ```kotlin
-  is Result.Success->{
-    val data=result.get()
+    var jsonData=Sleek("[1,\"thing\",{\"thang\":24}]")
     
-    //usage of my Sleek JSON parser
+    (jsonData[2]%"thang").int
+    //24
     
-    var jsonData=Sleek(data)
-    toast((jsonData[1]%"login_token").value)
-    toast(jsonData[2].value)
+    jsonData[1].string
+    //thing
+    
+    jsonData.array
+    //An array containing a Sleek object of each element of the JSON array: 1, "thing", and {"thang":24}
+    
+    jsonData[2].map
+    //A map containing the pair "thang" and a Sleek object based on 24.
+    
     
     //end usage of my Sleek JSON Parser
-    
-    done=true//success, get token, decide where to send user
-  }
   ```
 
-The above block of code is a sample from Fuel post request. I receive a JSON array from my request, and create a `Sleek` object using the constructor on the `data` string I received. I then toast the login token (by accessing the login_token property of the second (index of 1) item in the JSON array with `jsonData[1]` (which I know is an object), then access the value of the property with `%"login_token"`, and finally accessing the `value` property to get the single (non-object, non-array) value out. The third element in my JSON array is just a string, so I access it using the indexing operator, then immediately use `.value` to get it out and toast it.
+
 
 ## Disclaimer
-
-- This parser does not check to make sure that the JSON string is valid JSON nor does it check if the operation you are trying to run is stupid.
 
 - You must know what the structure of the JSON you are trying to inspect is, this class is merely designed to traverse it, and get values from it.
 
