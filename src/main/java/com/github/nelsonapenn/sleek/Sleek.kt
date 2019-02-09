@@ -1,13 +1,59 @@
 package com.github.nelsonapenn.sleek
 
+import java.lang.NumberFormatException
+
+
 class Sleek(var source:String) {
-    var value:String=""
-        get(){
-            var v:String=""
-            for(c:Char in source)
-                if(c!='\"')
-                    v+=c
+    var stringValue:String=""
+        get() {
+            if(source[0]=='[')
+                throw AintNoJSONStringLiteralException("Attempt to convert JSON Array to string literal.")
+            if(source[0]=='{')
+                throw AintNoJSONStringLiteralException("Attempt to convert JSON Object to string literal.")
+            var v: String = ""
+            var flag: Boolean = false
+            for (c: Char in source) {
+                if (flag) {
+                    v += c
+                    flag = false
+                    continue
+                }
+                if (c == '\\') {
+                    flag = true
+                    continue
+                }
+                if (c != '\"')
+                    v += c
+            }
             return v
+        }
+    var intValue:Int=0
+        get(){
+            try {
+                return stringValue.toInt()
+            }
+            catch (e:NumberFormatException)
+            {
+                throw AintNoJSONIntLiteralException("Attempt to get an int value from JSON that doesn't represent an int.")
+            }
+        }
+    var array:Array<Sleek> = Array(0){Sleek("")}
+        get(){
+            if(source[0]!='[')
+                throw AintNoJSONArrayException("Attempt to access element of JSON string that is not a JSON Array.")
+            var output=Array(0){Sleek("")}
+            var i=0
+            while(true)
+            {
+                try{
+                    output+=get(i)
+                    i++
+                }
+                catch(e:IndexOutOfBoundsException)
+                {
+                    continue
+                }
+            }
         }
     private fun seekNext(pos: Int): Int {
         var p = pos
@@ -20,10 +66,9 @@ class Sleek(var source:String) {
             p++
         }
         p++
-        return when(p){
-            source.length->-1
-            else -> p
-        }
+        if(p>=source.length)
+            return -1
+        return p
     }
     private fun grabToNext(pos: Int): String {
         var p = pos
@@ -43,10 +88,14 @@ class Sleek(var source:String) {
         return value
     }
     operator fun get(i: Int): Sleek {
+        if(source[0]!='[')
+            throw AintNoJSONArrayException("Attempt to access element of JSON string that is not a JSON Array.")
         var j:Int=0
         var pos:Int=1
         while(j<i) {
             pos = seekNext(pos)
+            if(pos==-1)
+                throw IndexOutOfBoundsException("")
             j++
         }
         var output:String=grabToNext(pos)
@@ -54,7 +103,7 @@ class Sleek(var source:String) {
     }
     operator fun rem(myProperty:String): Sleek {
         if (source[0] != '{')
-            return Sleek("")
+            throw AintNoJSONObjectException("Attempt to access property of JSON string that is not a JSON object")
         var property='\"'+myProperty+'\"'
         var i: Int = 1
         var lvl: Int = 1
@@ -72,3 +121,7 @@ class Sleek(var source:String) {
         return Sleek("")
     }
 }
+class AintNoJSONIntLiteralException(message:String):Exception(message)
+class AintNoJSONStringLiteralException(message:String):Exception(message)
+class AintNoJSONArrayException(message:String):Exception(message)
+class AintNoJSONObjectException(message:String):Exception(message)
