@@ -1,17 +1,14 @@
-package com.example.nelsonpenn.connect
-
-import com.bumptech.glide.load.engine.bitmap_recycle.IntegerArrayAdapter
-import kotlin.reflect.KProperty
+package com.github.nelsonapenn.sleek
 
 class Sleek(var source:String) {
     var value:String=""
-    get(){
-        var v:String=""
-        for(c:Char in source)
-            if(c!='\"')
-                v+=c
-        return v
-    }
+        get(){
+            var v:String=""
+            for(c:Char in source)
+                if(c!='\"')
+                    v+=c
+            return v
+        }
     private fun seekNext(pos: Int): Int {
         var p = pos
         var lvl:Int=0
@@ -28,7 +25,6 @@ class Sleek(var source:String) {
             else -> p
         }
     }
-
     private fun grabToNext(pos: Int): String {
         var p = pos
         var value: String=""
@@ -45,10 +41,7 @@ class Sleek(var source:String) {
             p++
         }
         return value
-
     }
-
-
     operator fun get(i: Int): Sleek {
         var j:Int=0
         var pos:Int=1
@@ -58,9 +51,7 @@ class Sleek(var source:String) {
         }
         var output:String=grabToNext(pos)
         return Sleek(output)
-
     }
-
     operator fun rem(myProperty:String): Sleek {
         if (source[0] != '{')
             return Sleek("")
@@ -80,6 +71,4 @@ class Sleek(var source:String) {
         }
         return Sleek("")
     }
-
-
 }
