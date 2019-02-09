@@ -4,7 +4,7 @@ import java.lang.NumberFormatException
 
 
 class Sleek(var source:String) {
-    var stringValue:String=""
+    var string:String=""
         get() {
             if(source[0]=='[')
                 throw AintNoJSONStringLiteralException("Attempt to convert JSON Array to string literal.")
@@ -27,10 +27,10 @@ class Sleek(var source:String) {
             }
             return v
         }
-    var intValue:Int=0
+    var int:Int=0
         get(){
             try {
-                return stringValue.toInt()
+                return string.toInt()
             }
             catch (e:NumberFormatException)
             {
@@ -40,7 +40,7 @@ class Sleek(var source:String) {
     var array:Array<Sleek> = Array(0){Sleek("")}
         get(){
             if(source[0]!='[')
-                throw AintNoJSONArrayException("Attempt to access element of JSON string that is not a JSON Array.")
+                throw AintNoJSONArrayException("Attempt to convert a non JSON Array string to an array.")
             var output=Array(0){Sleek("")}
             var i=0
             while(true)
@@ -54,6 +54,32 @@ class Sleek(var source:String) {
                     continue
                 }
             }
+        }
+    var map:Map<String,Sleek> = HashMap()
+        get(){
+            if(source[0]!='{')
+                throw AintNoJSONObjectException("Attempt to convert a non JSON object string to a map.")
+            var output=HashMap<String,Sleek>()
+            var i=0
+            var pos=1
+
+            while(pos<source.length && pos!=-1)
+            {
+                var key=""
+                var value=""
+                pos++
+                while(source[pos]!='\"' || (pos>=1 && source[pos-1]=='\\'))
+                {
+                    key+=source[pos++]
+                }
+                // now at the "
+                pos++
+                // now at the :
+                value=grabToNext(pos++)
+                output.put(key,Sleek(value))
+                pos=seekNext(pos)
+            }
+            return output
         }
     private fun seekNext(pos: Int): Int {
         var p = pos
@@ -82,7 +108,8 @@ class Sleek(var source:String) {
                 lvl--
             if(lvl<0)
                 break
-            value+=source[p]
+            if(source[p]!='\"' || (p>=1 && source[p-1]=='\\'))
+                value+=source[p]
             p++
         }
         return value
@@ -103,7 +130,7 @@ class Sleek(var source:String) {
     }
     operator fun rem(myProperty:String): Sleek {
         if (source[0] != '{')
-            throw AintNoJSONObjectException("Attempt to access property of JSON string that is not a JSON object")
+            throw AintNoJSONObjectException("Attempt to access property of JSON string that is not a JSON object.")
         var property='\"'+myProperty+'\"'
         var i: Int = 1
         var lvl: Int = 1
