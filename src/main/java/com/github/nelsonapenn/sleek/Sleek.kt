@@ -6,6 +6,8 @@ import java.lang.NumberFormatException
 class Sleek(var source:String) {
     var string:String=""
         get() {
+            if(source.length==0)
+                return ""
             if(source[0]=='[')
                 throw AintNoJSONStringLiteralException("Attempt to convert JSON Array to string literal.")
             if(source[0]=='{')
@@ -61,13 +63,12 @@ class Sleek(var source:String) {
             if(source[0]!='{')
                 throw AintNoJSONObjectException("Attempt to convert a non JSON object string to a map.")
             var output=HashMap<String,Sleek>()
-            var i=0
             var pos=1
 
             while(pos<source.length && pos!=-1)
             {
-                var key=""
-                var value=""
+                var key:String=""
+                var value:String=""
                 pos++
                 while(source[pos]!='\"' || (pos>=1 && source[pos-1]=='\\'))
                 {
@@ -76,8 +77,8 @@ class Sleek(var source:String) {
                 // now at the "
                 pos++
                 // now at the :
-                value=grabToNext(pos++)
-                output.put(key,Sleek(value))
+                value=grabToNext(++pos)
+                output[key]=Sleek(value)
                 pos=seekNext(pos)
             }
             return output
@@ -109,7 +110,7 @@ class Sleek(var source:String) {
                 lvl--
             if(lvl<0)
                 break
-            if(source[p]!='\"' || (p>=1 && source[p-1]=='\\'))
+            if(lvl!=0 || source[p]!='\"' || (p>=1 && source[p-1]=='\\'))
                 value+=source[p]
             p++
         }
