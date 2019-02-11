@@ -102,6 +102,7 @@ class Sleek(var source:String) {
         {
             return !isJSONOBJECT && !isJSONArray
         }
+    override fun toString():String=source
     private fun seekNext(pos: Int): Int {
         var p = pos
         var lvl:Int=0
