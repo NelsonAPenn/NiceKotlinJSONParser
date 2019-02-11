@@ -83,6 +83,25 @@ class Sleek(var source:String) {
             }
             return output
         }
+    var isJSONOBJECT:Boolean=false
+        get()
+        {
+            if(source.isEmpty())
+                return false
+            return source[0]=='{'
+        }
+    var isJSONArray:Boolean=false
+        get()
+        {
+            if(source.isEmpty())
+                return false
+            return source[0]=='['
+        }
+    var isJSONLiteral:Boolean=false
+        get()
+        {
+            return !isJSONOBJECT && !isJSONArray
+        }
     private fun seekNext(pos: Int): Int {
         var p = pos
         var lvl:Int=0
