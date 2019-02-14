@@ -3,6 +3,7 @@ package com.github.nelsonapenn.sleek
 import java.lang.NumberFormatException
 
 
+//TODO: need to check for what parts of the string are strings vs ints vs properties
 class Sleek(var source:String) {
     var string:String=""
         get() {
