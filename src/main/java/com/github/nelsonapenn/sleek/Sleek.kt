@@ -3,7 +3,6 @@ package com.github.nelsonapenn.sleek
 import java.lang.NumberFormatException
 
 
-//TODO: need to update definition of %
 class Sleek(var source:String) {
     private data class Character(val level:Int=0, val type:Char=' ')
     private lateinit var meta: Array<Character>
