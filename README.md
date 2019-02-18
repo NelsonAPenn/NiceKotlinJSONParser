@@ -28,6 +28,8 @@ Just download the Kotlin file Sleek.kt and add it into your project.
 
 - Chain these for a nice JSON parsing experience!
 
+- `toString()` returns the JSON source string for the object 
+
 ## Example
 
   ```kotlin
@@ -48,11 +50,3 @@ Just download the Kotlin file Sleek.kt and add it into your project.
     
     //end usage of my Sleek JSON Parser
   ```
-
-
-
-## Disclaimer
-
-- You must know what the structure of the JSON you are trying to inspect is, this class is merely designed to traverse it, and get values from it.
-
-- There is an overwhelmingly large chance that the implementation has bugs, unhandled edge cases. Please post them in the bug reports section.
