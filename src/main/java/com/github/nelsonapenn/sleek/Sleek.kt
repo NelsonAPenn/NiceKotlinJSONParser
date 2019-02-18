@@ -1,7 +1,5 @@
 package com.github.nelsonapenn.sleek
 
-import java.lang.NumberFormatException
-
 
 class Sleek(var source:String) {
     private data class Character(val level:Int=0, val type:Char=' ')
@@ -158,7 +156,7 @@ class Sleek(var source:String) {
             }
             return output
         }
-    var isJSONOBJECT:Boolean=false
+    var isJSONObject:Boolean=false
         get()
         {
             if(source.isEmpty())
@@ -175,7 +173,7 @@ class Sleek(var source:String) {
     var isJSONLiteral:Boolean=false
         get()
         {
-            return !isJSONOBJECT && !isJSONArray
+            return !isJSONObject && !isJSONArray
         }
     override fun toString():String=source
     private fun seekNext(pos: Int): Int {
