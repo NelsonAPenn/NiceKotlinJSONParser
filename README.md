@@ -22,13 +22,15 @@ Just download the Kotlin file Sleek.kt and add it into your project.
 
 - When you have a Sleek object that is based on a single value, simply use `.string` to get it out into a string, or `.int` to get it out as an int.
 
--When you have a Sleek object that is based on a JSON array, you have the option of using `.array` to return an array of type `Array<Sleek>` containing the entries of the JSON array.
+- When you have a Sleek object that is based on a JSON array, you have the option of using `.array` to return an array of type `Array<Sleek>` containing the entries of the JSON array.
 
--When you have a Sleek object that is based on a JSON object, you have the option of using `.map` to return a map of type `Map<String,Sleek>` containing the fields of the object.
+- When you have a Sleek object that is based on a JSON object, you have the option of using `.map` to return a map of type `Map<String,Sleek>` containing the fields of the object.
 
 - Chain these for a nice JSON parsing experience!
 
 - `toString()` returns the JSON source string for the object 
+
+- You can also use `isJSONObject`, 'isJSONArray`, and `isJSONLiteral` with obvious effects.
 
 ## Example
 
