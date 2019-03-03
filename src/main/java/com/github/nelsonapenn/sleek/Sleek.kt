@@ -43,7 +43,7 @@ class Sleek(var source:String) {
                 if(shouldContinue)
                     continue
             }
-            if(source[i]=='\"' && i>0 && source[i-1]!='\\') //string, flag it or stop flagging it if you already have
+            if(source[i]=='\"' && (i==0 || i>0 && source[i-1]!='\\')) //string, flag it or stop flagging it if you already have
             {
                 if(!flag) {
                     flag = true
@@ -81,6 +81,8 @@ class Sleek(var source:String) {
                 throw AintNoJSONStringLiteralException("Attempt to convert JSON Array to string literal.")
             if(meta[0].type=='{')
                 throw AintNoJSONStringLiteralException("Attempt to convert JSON Object to string literal.")
+            if(meta[0].type=='i')
+                throw AintNoJSONStringLiteralException("Attempt to convert JSON integer value to string literal.")
             var v: String = ""
             var flag: Boolean = false
             var i=1
@@ -113,7 +115,7 @@ class Sleek(var source:String) {
                 throw AintNoJSONIntLiteralException("Attempt to get an int value from JSON that doesn't represent an int.")
             else if(meta[0].type!='i')
                 throw AintNoJSONIntLiteralException("Attempt to get an int value from JSON that doesn't represent an int.")
-            return string.toInt()
+            return source.toInt()
         }
     var array:Array<Sleek> = Array(0){Sleek("")}
         get(){
