@@ -105,6 +105,12 @@ class Sleek(private var source:String) {
                         }
                         //tab
                         't'->v+="\t"
+                        //form feed
+                        'f'->v+="\u000c"
+                        //backspace
+                        'b'->v+="\b"
+                        //carriage return
+                        'r'->v+="\r"
                         //other escaped characters can just be added into the string directly
                         else-> v+=c
                     }
