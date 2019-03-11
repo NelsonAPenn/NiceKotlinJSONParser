@@ -1,12 +1,15 @@
 package com.github.nelsonapenn.sleek
 
+import java.lang.Integer.parseInt
+import java.lang.Long.parseLong
 
-class Sleek(var source:String) {
-    private data class Character(val level:Int=0, val type:Char=' ')
-    private lateinit var meta: Array<Character>
+
+class Sleek(private var source:String) {
+    private data class JSONCharacter(val level:Int=0, val type:Char=' ')
+    private var meta: Array<JSONCharacter>
 
     init {
-        meta = Array(source.length) { Character() }
+        meta = Array(source.length) { JSONCharacter() }
         var i=0
         var flag=false
         var lvl=0
@@ -18,23 +21,23 @@ class Sleek(var source:String) {
                 when(source[i])
                 {
                     '['->{
-                        meta[i++]=Character(lvl++,'[')
+                        meta[i++]=JSONCharacter(lvl++,'[')
 
                     }
                     '{'->{
-                        meta[i++]=Character(lvl++,'{')
+                        meta[i++]=JSONCharacter(lvl++,'{')
                     }
                     ']'->{
-                        meta[i++]=Character(--lvl,']')
+                        meta[i++]=JSONCharacter(--lvl,']')
                     }
                     '}'->{
-                        meta[i++]=Character(--lvl,'}')
+                        meta[i++]=JSONCharacter(--lvl,'}')
                     }
                     ','->{
-                        meta[i++]=Character(lvl,',')
+                        meta[i++]=JSONCharacter(lvl,',')
                     }
                     ':'->{
-                        meta[i++]=Character(lvl,':')
+                        meta[i++]=JSONCharacter(lvl,':')
                     }
                     else->{
                         shouldContinue=false
@@ -47,24 +50,24 @@ class Sleek(var source:String) {
             {
                 if(!flag) {
                     flag = true
-                    meta[i++]=Character(lvl,'s')
+                    meta[i++]=JSONCharacter(lvl,'s')
                     continue
                 }
                 else
                 {
                     flag=false
-                    meta[i++] = Character(lvl,'s')
+                    meta[i++] = JSONCharacter(lvl,'s')
                     continue
                 }
             }
 
             if(flag)//string
             {
-                meta[i]=Character(lvl,'s')
+                meta[i]=JSONCharacter(lvl,'s')
             }
             else
             {
-                meta[i]=Character(lvl,'i') //should be a number
+                meta[i]=JSONCharacter(lvl,'i') //should be a number
             }
 
             i++
@@ -83,18 +86,28 @@ class Sleek(var source:String) {
                 throw AintNoJSONStringLiteralException("Attempt to convert JSON Object to string literal.")
             if(meta[0].type=='i')
                 throw AintNoJSONStringLiteralException("Attempt to convert JSON integer value to string literal.")
-            var v: String = ""
-            var flag: Boolean = false
+            var v = ""
+            var flag = false
             var i=1
             while(i<source.length-1)
             {
-                var c:Char=source[i]
+                val c:Char=source[i]
                 //remove escapes on escape characters
                 if (flag) {
-                    if(c=='n')
-                        v+="\n"
-                    else
-                        v += c
+                    when(c)
+                    {
+                        //newline
+                        'n'->v+="\n"
+                        //unicode
+                        'u'->{
+                            v+=(Character.toChars(Integer.parseInt(source.substring(i+1,i+5),16)))[0]
+                            i+=4
+                        }
+                        //tab
+                        't'->v+="\t"
+                        //other escaped characters can just be added into the string directly
+                        else-> v+=c
+                    }
                     flag = false
                     i++
                     continue
@@ -145,8 +158,8 @@ class Sleek(var source:String) {
 
             while(pos<source.length && pos!=-1)
             {
-                var key:String=""
-                var value:String=""
+                var key=""
+                var value=""
                 key=grabValue(pos)
                 key=key.substring(1,key.length-1)
 
@@ -180,7 +193,7 @@ class Sleek(var source:String) {
     override fun toString():String=source
     private fun seekNext(pos: Int): Int {
         var p = pos
-        var lvl=meta[pos].level
+        val lvl=meta[pos].level
         while (p<source.length && (meta[p].type != ',' || meta[p].level!=lvl)){
             p++
         }
@@ -192,7 +205,7 @@ class Sleek(var source:String) {
     private fun grabValue(pos: Int): String {
         var p = pos
         var value: String=""
-        var lvl=meta[pos].level
+        val lvl=meta[pos].level
         val type= meta[pos].type
         when(type){
             'i'->{
@@ -228,8 +241,8 @@ class Sleek(var source:String) {
     operator fun get(i: Int): Sleek {
         if(meta[0].type!='[')
             throw AintNoJSONArrayException("Attempt to access element of JSON string that is not a JSON Array.")
-        var j:Int=0
-        var pos:Int=1
+        var j=0
+        var pos=1
         while(j<i) {
             pos = seekNext(pos)
             if(pos==-1)
