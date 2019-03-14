@@ -278,6 +278,27 @@ class Sleek(private var source:String) {
         }
         return Sleek("")
     }
+    companion object {
+        fun fromArray(arr:Array<Sleek>):Sleek{
+            var output:String="["
+            for(i in 0 until arr.size-1)
+            {
+                output+=arr[i].toString()+","
+            }
+            output+=arr[arr.size-1].toString()+"]"
+            return Sleek(output)
+        }
+        fun fromMap(map:Map<String,Sleek>):Sleek{
+            var output:String="{"
+            for((key,value)in map)
+            {
+                output+="\""+key+"\":"+value.toString()+","
+            }
+            output=output.substring(0 until output.length-1)
+            output+="}"
+            return Sleek(output)
+        }
+    }
 }
 class AintNoJSONIntLiteralException(message:String):Exception(message)
 class AintNoJSONStringLiteralException(message:String):Exception(message)
