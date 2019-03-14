@@ -3,7 +3,6 @@ package com.github.nelsonapenn.sleek
 import java.lang.Integer.parseInt
 import java.lang.Long.parseLong
 
-
 class Sleek(private var source:String) {
     private data class JSONCharacter(val level:Int=0, val type:Char=' ')
     private var meta: Array<JSONCharacter>
@@ -298,6 +297,9 @@ class Sleek(private var source:String) {
             output+="}"
             return Sleek(output)
         }
+        fun fromLiteral(s:String):Sleek=Sleek("\"$s\"")
+        fun fromLiteral(i:Int):Sleek=Sleek(i.toString())
+        fun fromLiteral(b:Boolean):Sleek=Sleek(b.toString())
     }
 }
 class AintNoJSONIntLiteralException(message:String):Exception(message)
