@@ -30,7 +30,7 @@ Just download the Kotlin file Sleek.kt and add it into your project.
 
 - `toString()` returns the JSON source string for the object 
 
-- You can also use `isJSONObject`, 'isJSONArray`, and `isJSONLiteral` with obvious effects.
+- You can also use `isJSONObject`, `isJSONArray`, and `isJSONLiteral` with obvious effects.
 
 ## Example
 
