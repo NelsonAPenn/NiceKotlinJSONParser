@@ -18,8 +18,6 @@ Just download the Kotlin file Sleek.kt and add it into your project.
 
 - The mod operator `%`, placed between a Sleek object (that is based on a JSON object) and a string parameter name, returns a Sleek object based on the value of that property.
 
-- Chain these for a nice JSON parsing experience!
-
 - When you have a Sleek object that is based on a single value, simply use `.string` to get it out into a string, or `.int` to get it out as an int.
 
 - When you have a Sleek object that is based on a JSON array, you have the option of using `.array` to return an array of type `Array<Sleek>` containing the entries of the JSON array.
