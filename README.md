@@ -1,4 +1,4 @@
-# Sleek JSONParser
+# Sleek JSON Parser
 
 I created this nice Kotlin JSON Parser to be a simple, lightweight, and painless way to navigate and extract values from JSON data as well as build JSON objects.
 
