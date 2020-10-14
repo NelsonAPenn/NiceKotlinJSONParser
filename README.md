@@ -23,6 +23,8 @@ First instantiate a `Sleek` object from the JSON data. The constructor accepts t
 
 - If the root JSON value is an array, the index operator `[a]` (where `a` is of type `Int`) returns a `Sleek` object containing the value in the array at index `a`. If not found, throws   `JsonArrayIndexOutOfBoundsException`.
 
+- Chain these for a nice JSON parsing experience!
+
 - When you have a Sleek object that contains a single JSON literal, simply use:
   - `.string` to return a `String?`
   - `.int` to return a `Int?`
@@ -46,7 +48,6 @@ First instantiate a `Sleek` object from the JSON data. The constructor accepts t
   - `floatMap` to return `Map<String, Float?>`
   - `booleanMap` to return `Map<String, Boolean?>`
 
-- Chain these for a nice JSON parsing experience!
 
 - You can also use the following boolean functions:
   - `isJsonObject`
