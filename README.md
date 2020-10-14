@@ -48,7 +48,7 @@ First instantiate a `Sleek` object from the JSON data. The constructor accepts t
 
 - Chain these for a nice JSON parsing experience!
 
-- You can also use:
+- You can also use the following boolean functions:
   - `isJsonObject`
   - `isJsonArray`
   - `isJsonLiteral`
@@ -56,7 +56,6 @@ First instantiate a `Sleek` object from the JSON data. The constructor accepts t
   - `isJsonString`
   - `isJsonBoolean`
   - `isJsonNullValue`
-  - with obvious effects.
 
 ## Example
 
