@@ -1,6 +1,9 @@
 # Built application files
 /*/build/
 
+# IntelliJ IDEA
+.idea/
+
 # Crashlytics configuations
 com_crashlytics_export_strings.xml
 
