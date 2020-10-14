@@ -1,7 +1,5 @@
 package com.github.nelsonapenn.sleek
 
-//import com.google.gson.Gson
-
 class Sleek(source: String? = null, jsonNode: JsonNode? = null){
     private companion object
     {
@@ -119,6 +117,53 @@ class Sleek(source: String? = null, jsonNode: JsonNode? = null){
         return Sleek(jsonNode = value)
     }
 
+    val isJsonLiteral: Boolean
+    get()
+    {
+        return jsonNode is JsonLiteral
+    }
+
+    val isJsonNumber: Boolean
+    get()
+    {
+        val token = (jsonNode as? JsonLiteral)?.value as? JsonNumberToken
+        return token != null
+    }
+
+    val isJsonString: Boolean
+        get()
+        {
+            val token = (jsonNode as? JsonLiteral)?.value as? JsonStringToken
+            return token != null
+        }
+
+    val isJsonBoolean: Boolean
+        get()
+        {
+            val token = (jsonNode as? JsonLiteral)?.value as? JsonBooleanToken
+            return token != null
+        }
+
+    val isJsonNullValue: Boolean
+        get()
+        {
+            val token = (jsonNode as? JsonLiteral)?.value
+            return token?.tokenType == TokenType.NULL
+        }
+
+
+
+    val isJsonObject: Boolean
+    get()
+    {
+        return jsonNode is JsonObject
+    }
+
+    val isJsonArray: Boolean
+    get()
+    {
+        return jsonNode is JsonArray
+    }
 
     val map: Map<String, Sleek>
     get()
@@ -131,6 +176,7 @@ class Sleek(source: String? = null, jsonNode: JsonNode? = null){
         }
         return out
     }
+
 
     val floatMap: Map<String, Float?>
         get()

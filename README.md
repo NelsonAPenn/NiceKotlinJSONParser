@@ -1,6 +1,11 @@
 # Sleek JSON Parser
 
-I created this nice Kotlin JSON Parser to be a simple, lightweight, and painless way to navigate and extract values from JSON data as well as build JSON objects.
+I created this JSON Parser to be a simple, lightweight, and painless way to navigate and extract values from JSON data.
+
+Benefits:
+
+- Flexible: no need to create data classes into which JSON data is deserialized.
+- Lightweight: mere kilobytes, no other third-party dependencies.
 
 ## Installation
 
@@ -12,41 +17,66 @@ Just download the Kotlin file Sleek.kt and add it into your project.
 
 ## Usage
 
-- You first make a `Sleek` object on the JSON string you want to extract values from.
+First instantiate a `Sleek` object from the JSON data. The constructor accepts the source JSON string. Afterwards:
 
-- The index operator `[]` finds the ith element of a Sleek object (that is based on a JSON array), and returns another Sleek object containing said nth element.
+- If the root JSON value is an object, the index operator `[a]` (where `a` is of type `String`) returns a `Sleek` object containing the value in the dictionary associated with key `a`. If not found, throws `JsonKeyException`
 
-- The mod operator `%`, placed between a Sleek object (that is based on a JSON object) and a string parameter name, returns a Sleek object based on the value of that property.
+- If the root JSON value is an array, the index operator `[a]` (where `a` is of type `Int`) returns a `Sleek` object containing the value in the array at index `a`. If not found, throws   `JsonArrayIndexOutOfBoundsException`.
 
-- When you have a Sleek object that is based on a single value, simply use `.string` to get it out into a string, or `.int` to get it out as an int.
+- When you have a Sleek object that contains a single JSON literal, simply use:
+  - `.string` to return a `String?`
+  - `.int` to return a `Int?`
+  - `.float` to return a `Float?`
+  - `.boolean` to return a `Boolean?`
+  - All of the above values are `null` only if the value is a JSON `null` literal. Attempting to cast to a mismatched type throws an exception.
 
-- When you have a Sleek object that is based on a JSON array, you have the option of using `.array` to return an array of type `Array<Sleek>` containing the entries of the JSON array.
+- When you have a Sleek object that is based on a JSON array, you have the option of using `.list` to return an array of type `List<Sleek>` containing the entries of the JSON array.
 
-- When you have a Sleek object that is based on a JSON object, you have the option of using `.map` to return a map of type `Map<String,Sleek>` containing the fields of the object.
+- Strictly typed lists are also available. Use
+  - `stringList` to return `List<String?>`
+  - `intList` to return `List<Int?>`
+  - `floatList` to return `List<Float?>`
+  - `booleanList` to return `List<Boolean?>`
+
+- When you have a Sleek object that is based on a JSON object, you have the option of using `.map` to return a map of type `Map<String, Sleek>` containing the fields of the object.
+
+- Strictly typed maps are also available. Use
+  - `stringMap` to return `Map<String, String?>`
+  - `intMap` to return `Map<String, Int?>`
+  - `floatMap` to return `Map<String, Float?>`
+  - `booleanMap` to return `Map<String, Boolean?>`
 
 - Chain these for a nice JSON parsing experience!
 
-- `toString()` returns the JSON source string for the object 
-
-- You can also use `isJSONObject`, `isJSONArray`, and `isJSONLiteral` with obvious effects.
+- You can also use:
+  - `isJsonObject`
+  - `isJsonArray`
+  - `isJsonLiteral`
+  - `isJsonNumber`
+  - `isJsonString`
+  - `isJsonBoolean`
+  - `isJsonNullValue`
+  - with obvious effects.
 
 ## Example
 
   ```kotlin
-    var jsonData=Sleek("[1,\"thing\",{\"thang\":24}]")
-    
-    (jsonData[2]%"thang").int
+    val jsonData = Sleek("""[ 1, "thing", { "thang": 24 } ]""")
+    val jsonData2 = Sleek("""[1, 2, 3.5, 4, null, -7.1e4]""")
+
+    jsonData[2]["thang"].int
     //24
-    
+
     jsonData[1].string
     //thing
-    
-    jsonData.array
+
+    jsonData.list
     //An array containing a Sleek object of each element of the JSON array: 1, "thing", and {"thang":24}
-    
+
     jsonData[2].map
     //A map containing the pair "thang" and a Sleek object based on 24.
-    
-    
-    //end usage of my Sleek JSON Parser
+
+    jsonData2.floatList
+    // List<Int?> => [1.0, 2.0, 3.5, 4.0, null, -71000.0]
+
   ```
